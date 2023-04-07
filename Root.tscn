@@ -1,0 +1,60 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Field Of View/Scripts/FieldOfView2D.gd" type="Script" id=1]
+[ext_resource path="res://Examples/Sprites/Player.png" type="Texture" id=2]
+[ext_resource path="res://Examples/Scripts/PlayerCharacter.gd" type="Script" id=3]
+[ext_resource path="res://Examples/Sprites/Enemy.png" type="Texture" id=5]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 59.0085
+
+[sub_resource type="CircleShape2D" id=2]
+radius = 60.0333
+
+[node name="Root" type="Node"]
+
+[node name="Player Character" type="Area2D" parent="."]
+collision_mask = 6
+script = ExtResource( 3 )
+_fieldOfViewPath = NodePath("FieldOfView2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player Character"]
+shape = SubResource( 1 )
+
+[node name="FieldOfView2D" type="Area2D" parent="Player Character"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 1 )
+_radius = 300.0
+_angleView = 120
+_obstacleLayer = 4
+_collision2DPath = NodePath("CollisionPolygon2D")
+_meshInstance2DPath = NodePath("MeshInstance2D")
+_normalColor = Color( 0.266667, 1, 0.913725, 0.337255 )
+_detectColor = Color( 1, 0, 0, 0.294118 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Player Character/FieldOfView2D"]
+polygon = PoolVector2Array( 0, 0, 0, 0, 0, 0 )
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Player Character/FieldOfView2D"]
+
+[node name="Model" type="Sprite" parent="Player Character"]
+texture = ExtResource( 2 )
+
+[node name="Enemy Character" type="Area2D" parent="."]
+position = Vector2( 384, -44 )
+collision_layer = 2
+collision_mask = 5
+
+[node name="Model" type="Sprite" parent="Enemy Character"]
+texture = ExtResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy Character"]
+shape = SubResource( 2 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+current = true
+zoom = Vector2( 2, 2 )
+
+[connection signal="area_entered" from="Player Character/FieldOfView2D" to="Player Character/FieldOfView2D" method="_on_FieldOfView2D_area_entered"]
+[connection signal="area_exited" from="Player Character/FieldOfView2D" to="Player Character/FieldOfView2D" method="_on_FieldOfView2D_area_exited"]
