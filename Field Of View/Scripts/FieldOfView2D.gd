@@ -52,14 +52,14 @@ func CheckViewTargets():
 	var points: PoolVector2Array = PoolVector2Array();
 	
 	var faceAngle: int =  RoundToInt(rad2deg(_faceDirection.angle()));
-	var oldViewCast: ViewCastInfo;
+	var oldViewCast;
 	
 	var center: Vector2 = Vector2.ZERO;
 	points.append(center);
 	
 	for index in range(0, stepCount + 1):
 		var angle: float = faceAngle - _angleView / 2 + stepAngleSize * index;
-		var newViewCast: ViewCastInfo = ViewCast(angle);
+		var newViewCast = ViewCast(angle);
 
 		if (index > 0):
 			var edgeDistanceThresholdExceeded: bool = abs(oldViewCast.Distance - newViewCast.Distance) > _edgeDistanceThreshold;
@@ -87,7 +87,7 @@ func RoundToInt(value) -> int:
 	
 	
 
-func ViewCast(angle : float) -> ViewCastInfo:
+func ViewCast(angle : float):
 	var direction: Vector2 = Vector2(cos(deg2rad(angle)), sin(deg2rad(angle)));
 
 	var from: Vector2 = global_position;
@@ -103,7 +103,7 @@ func ViewCast(angle : float) -> ViewCastInfo:
 	
 	
 
-func FindEdge(minViewCast : ViewCastInfo, maxViewCast : ViewCastInfo) -> EdgeInfo:
+func FindEdge(minViewCast, maxViewCast):
 	var minAngle: float = minViewCast.Angle;
 	var maxAngle: float = maxViewCast.Angle;
 	
@@ -112,7 +112,7 @@ func FindEdge(minViewCast : ViewCastInfo, maxViewCast : ViewCastInfo) -> EdgeInf
 	
 	for index in range (0, _edgeResolveIterations):
 		var angle: float = (minAngle + maxAngle) / 2;
-		var newViewCast: ViewCastInfo = ViewCast(angle);
+		var newViewCast = ViewCast(angle);
 		var edgeDistanceThresholdExceeded: bool = abs(minViewCast.Distance - newViewCast.Distance) > _edgeDistanceThreshold;
 
 		if (newViewCast.IsHit == minViewCast.IsHit && edgeDistanceThresholdExceeded == false):
